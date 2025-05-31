@@ -1,14 +1,23 @@
-import { jwtDecode, JwtPayload } from "jwt-decode";
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthConfig } from "next-auth";
+import { jwtDecode } from "jwt-decode";
+import { fetcher } from "./lib/api/fetcher";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const config = {
+  pages: {
+    signIn: "/sign-in",
+  },
+  session: {
+    strategy: "jwt",
+  },
   providers: [
-    Credentials({
+    CredentialsProvider({
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { type: "email" },
+        password: { type: "password" },
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           console.log("Missing credentials", credentials);
@@ -16,15 +25,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         try {
-          const response = await fetch(
-            `${process.env.API_URL}/api/v1/auth/signin`,
+          const data = await fetcher<{ access_token: string }>(
+            "/api/v1/auth/signin",
+            undefined,
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-origin": process.env.ORIGIN || "",
-                "x-client-id": process.env.CLIENT_ID || "",
-              },
               body: JSON.stringify({
                 email: credentials.email,
                 password: credentials.password,
@@ -32,30 +37,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           );
 
-          if (!response.ok) {
-            console.log(
-              "Bad response:",
-              response.status,
-              await response.text()
-            );
-            return null;
-          }
-
-          const data = await response.json();
-
           if (!data.access_token) {
             console.log("No access_token in response:", data);
             return null;
           }
 
-          const decodedToken: JwtPayload & { username: string } = jwtDecode(
+          const decodedToken = jwtDecode<{ sub: string; username: string }>(
             data.access_token
           );
 
-          console.log("Received data from backend:", data);
-
-          if (!decodedToken || !decodedToken.sub || !decodedToken.username) {
-            console.log("Missing fields in response:", data);
+          if (!decodedToken?.sub || !decodedToken.username) {
+            console.log("Missing fields in decoded token:", decodedToken);
             return null;
           }
 
@@ -72,18 +64,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
+
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = user.token;
-        token.id = user.id;
-        token.email = user.email;
-      }
-      return token;
-    },
     async session({ session, token }) {
       const customToken = token as {
         accessToken?: string;
@@ -97,8 +79,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return session;
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.accessToken = user.token;
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+
+    authorized({ request, auth }) {
+      // Array of regex patterns of the paths we want to protect
+      const protectedPaths = [
+        /^\/$/,
+        /\/organization(\/.*)?/,
+        /\/team(\/.*)?/,
+        /\/player(\/.*)?/,
+        /\/user(\/.*)?/,
+        /\/profile(\/.*)?/,
+      ];
+
+      // Get pathname from the req URL object
+      const { pathname } = request.nextUrl;
+
+      // Check if user is not authenticated and accessing a protected path
+      if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
+    },
   },
-  pages: {
-    signIn: "/signin",
-  },
-});
+} satisfies NextAuthConfig;
+
+export const authOptions = config;
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

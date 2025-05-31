@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/users/use-user";
 
 export default function UserProfile() {
   const { data, isLoading, isError } = useUser();

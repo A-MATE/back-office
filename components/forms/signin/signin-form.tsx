@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleSignin } from "@/lib/actions/auth.actions";
+import { signInWithCredentials } from "@/lib/actions/auth.actions";
 
-const SigninForm = ({ error }: { error?: string }) => {
+const SigninForm = () => {
   return (
     <>
       <h1>Sign In</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <form action={handleSignin}>
+
+      <form action={signInWithCredentials}>
         <div>
           <Label htmlFor="email">Your email address</Label>
           <Input
