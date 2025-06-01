@@ -1,13 +1,8 @@
 "use client";
-
-import { useActionState, useState } from "react";
-import { signIn } from "next-auth/react";
+import { useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,8 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { signInWithCredentials } from "@/lib/actions/auth.actions";
 import { useFormStatus } from "react-dom";
+import { signInWithCredentials } from "./auth.actions";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),

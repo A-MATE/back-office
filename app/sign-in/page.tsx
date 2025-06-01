@@ -1,14 +1,10 @@
 import { auth } from "@/auth";
-import { LoginForm } from "@/components/forms/signin/login-form";
+import { LoginForm } from "@/features/sign-in/login-form";
 import { APP_NAME } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
-export default async function SignInPage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
-}) {
+export default async function SignInPage() {
   const session = await auth();
 
   if (session) {
@@ -43,10 +39,6 @@ export default async function SignInPage({
             <h1 className="text-2xl font-semibold tracking-tight">
               Login to your account
             </h1>
-
-            {searchParams.error && (
-              <p className="text-red-500">{searchParams.error}</p>
-            )}
           </div>
           <LoginForm />
         </div>

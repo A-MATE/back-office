@@ -4,6 +4,30 @@ import type { NextAuthConfig } from "next-auth";
 import { jwtDecode } from "jwt-decode";
 import { fetcher } from "./lib/api/fetcher";
 
+function isStaticAsset(pathname: string): boolean {
+  return (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/images") ||
+    pathname.includes(".") || // .js, .css, .woff2, etc.
+    pathname === "/sign-in"
+  );
+}
+
+function isProtectedPath(pathname: string): boolean {
+  const protectedPaths = [
+    /^\/$/,
+    /\/organization(\/.*)?/,
+    /\/team(\/.*)?/,
+    /\/player(\/.*)?/,
+    /\/user(\/.*)?/,
+    /\/profile(\/.*)?/,
+  ];
+
+  return protectedPaths.some((pattern) => pattern.test(pathname));
+}
+
 export const config = {
   pages: {
     signIn: "/sign-in",
@@ -79,6 +103,7 @@ export const config = {
 
       return session;
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = user.token;
@@ -89,21 +114,17 @@ export const config = {
     },
 
     authorized({ request, auth }) {
-      // Array of regex patterns of the paths we want to protect
-      const protectedPaths = [
-        /^\/$/,
-        /\/organization(\/.*)?/,
-        /\/team(\/.*)?/,
-        /\/player(\/.*)?/,
-        /\/user(\/.*)?/,
-        /\/profile(\/.*)?/,
-      ];
-
-      // Get pathname from the req URL object
       const { pathname } = request.nextUrl;
 
-      // Check if user is not authenticated and accessing a protected path
-      if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
+      if (isStaticAsset(pathname)) {
+        return true;
+      }
+
+      if (!auth && isProtectedPath(pathname)) {
+        return false;
+      }
+
+      return true;
     },
   },
 } satisfies NextAuthConfig;

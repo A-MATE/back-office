@@ -1,16 +1,28 @@
-import { auth } from "@/auth.OLD";
+import { DashboardCards } from "@/features/dashboard/dashboard-cards";
+import { DashboardCharts } from "@/features/dashboard/dashboard-charts";
+import { DashboardHeader } from "@/features/dashboard/dashboard-header";
+import { DashboardShell } from "@/features/dashboard/dashboard-shell";
+import { RecentUsers } from "@/features/dashboard/recent-users";
+import { APP_NAME } from "@/lib/constants";
+import { Metadata } from "next";
 
-import { redirect } from "next/navigation";
+export const metadata: Metadata = {
+  title: APP_NAME,
+  description: "Back-Office Admin",
+};
 
-export default async function HomePage() {
-  const session = await auth();
-  if (!session) {
-    redirect("/signin");
-  }
-
+export default function DashboardPage() {
   return (
-    <div className="w-full max-w-md mx-auto">
-      <h1>Welcome to the Dashboard!</h1>
-    </div>
+    <DashboardShell>
+      <DashboardHeader
+        heading="Dashboard"
+        description="Overview of your SaaS metrics and activity."
+      />
+      <div className="grid gap-4 md:gap-8">
+        <DashboardCards />
+        <DashboardCharts />
+        <RecentUsers />
+      </div>
+    </DashboardShell>
   );
 }

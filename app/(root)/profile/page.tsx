@@ -1,10 +1,17 @@
-import UserProfile from "@/components/user-profile/user-profile";
+import { DashboardHeader } from "@/features/dashboard/dashboard-header";
+import { DashboardShell } from "@/features/dashboard/dashboard-shell";
+import { ProfileForm } from "@/features/profile/profile-form";
 
 export default async function ProfilePage() {
   return (
-    <div className="w-full max-w-md mx-auto">
-      <h1>Welcome to the Profile page!</h1>
-      <UserProfile />
-    </div>
+    <DashboardShell>
+      <DashboardHeader
+        heading="Profile"
+        description="Manage your account settings and profile information."
+      />
+      <div className="grid gap-10">
+        <ProfileForm />
+      </div>
+    </DashboardShell>
   );
 }
