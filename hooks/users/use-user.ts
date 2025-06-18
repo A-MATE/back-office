@@ -9,7 +9,7 @@ export function useUser() {
 
   return useQuery({
     queryKey: ["user", userId],
-    queryFn: () => getUserById(userId!, token!),
+    queryFn: () => getUserById(userId!),
     enabled: !!userId && !!token,
   });
 }

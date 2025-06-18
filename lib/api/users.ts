@@ -1,5 +1,6 @@
-import { fetcher } from "./fetcher";
+import axiosClient from "./axios-client";
 
-export async function getUserById(id: string, token: string) {
-  return fetcher(`/api/v1/users/${id}`, token);
+export async function getUserById(id: string) {
+  const response = await axiosClient.get(`/api/v1/users/${id}`);
+  return response.data;
 }

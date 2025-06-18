@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { LoginForm } from "@/features/sign-in/login-form";
+import { LoginForm } from "@/components/sign-in/login-form";
 import { APP_NAME } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import Image from "next/image";
@@ -17,18 +17,16 @@ export default async function SignInPage() {
         <div className="absolute inset-0 bg-primary" />
 
         <div className="relative z-20 flex items-center text-lg font-medium mb-10 ">
-          <span className="bg-gradient-to-b from-white to-black bg-clip-text text-transparent">
-            {APP_NAME}
-          </span>
+          <span className="text-white">{APP_NAME}</span>
         </div>
 
         <div className="relative z-20 flex flex-1 items-center justify-center">
           <Image
             src="/images/logo.png"
-            width={600}
-            height={600}
+            width={400}
+            height={400}
             alt="a-mate-logo"
-            className="rounded-lg"
+            className="rounded-4xl"
           />
         </div>
       </div>

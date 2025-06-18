@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import { Organizations } from "@/types/organization.types";
+
 import { useState } from "react";
 import Link from "next/link";
 
@@ -131,7 +131,7 @@ const columns = [
     cell: ({ row }) => (
       <div className="flex gap-1">
         <Button asChild size="sm" variant="outline">
-          <Link href={`/admin/organizations/${row.original.id}`}>View</Link>
+          <Link href={`/organization/${row.original.id}`}>View</Link>
         </Button>
       </div>
     ),

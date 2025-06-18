@@ -1,8 +1,8 @@
-import { DashboardCards } from "@/features/dashboard/dashboard-cards";
-import { DashboardCharts } from "@/features/dashboard/dashboard-charts";
-import { DashboardHeader } from "@/features/dashboard/dashboard-header";
-import { DashboardShell } from "@/features/dashboard/dashboard-shell";
-import { RecentUsers } from "@/features/dashboard/recent-users";
+import { DashboardCards } from "@/components/dashboard/dashboard-cards";
+import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+import { PageHeader } from "@/components/shared/page-header";
+import { PageWrapper } from "@/components/shared/page-wrapper";
+import { RecentUsers } from "@/components/dashboard/recent-users";
 import { APP_NAME } from "@/lib/constants";
 import { Metadata } from "next";
 
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <DashboardShell>
-      <DashboardHeader
+    <PageWrapper>
+      <PageHeader
         heading="Dashboard"
         description="Overview of your SaaS metrics and activity."
       />
@@ -23,6 +23,6 @@ export default function DashboardPage() {
         <DashboardCharts />
         <RecentUsers />
       </div>
-    </DashboardShell>
+    </PageWrapper>
   );
 }

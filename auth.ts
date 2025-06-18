@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import { jwtDecode } from "jwt-decode";
-import { fetcher } from "./lib/api/fetcher";
+import { signIn } from "./lib/api/auth";
 
 function isStaticAsset(pathname: string): boolean {
   return (
@@ -49,16 +49,9 @@ export const config = {
         }
 
         try {
-          const data = await fetcher<{ access_token: string }>(
-            "/api/v1/auth/signin",
-            undefined,
-            {
-              method: "POST",
-              body: JSON.stringify({
-                email: credentials.email,
-                password: credentials.password,
-              }),
-            }
+          const data = await signIn(
+            `${credentials.email}`,
+            `${credentials.password}`
           );
 
           if (!data.access_token) {
@@ -130,4 +123,9 @@ export const config = {
 } satisfies NextAuthConfig;
 
 export const authOptions = config;
-export const { handlers, auth, signIn, signOut } = NextAuth(config);
+export const {
+  handlers,
+  auth,
+  signIn: signInAction,
+  signOut,
+} = NextAuth(config);
