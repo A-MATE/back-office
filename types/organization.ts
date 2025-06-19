@@ -1,3 +1,4 @@
+import { organizationFormSchema } from "@/lib/validators";
 import * as z from "zod";
 
 export type Contact = {
@@ -27,18 +28,5 @@ export type CreateOrganizationResponse = {
   deletedAt: string | null;
   isActive: boolean;
 };
-
-export const organizationFormSchema = z.object({
-  name: z.string().min(1),
-  type: z.enum(["non-profit", "company", "club", "school"]),
-  address: z.string().optional(),
-  contact: z.object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().email().optional(),
-    phone: z.string().optional(),
-  }),
-  isActive: z.boolean().optional(),
-});
 
 export type OrganizationFormData = z.infer<typeof organizationFormSchema>;
