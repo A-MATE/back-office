@@ -10,12 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  OrganizationFormData,
-  organizationFormSchema,
-  OrganizationType,
-} from "@/types/organization";
+import { OrganizationFormData, OrganizationType } from "@/types/organization";
 import { Switch } from "../ui/switch";
+import { organizationFormSchema } from "@/lib/validators";
 
 type Props = {
   onSubmit: (data: OrganizationFormData) => void;

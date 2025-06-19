@@ -5,8 +5,6 @@ import {
 import axiosClient from "../axios-client";
 
 export async function getAllOrganizations() {
-  console.log("Calling getAllOrganizations via axiosClient");
-
   const response = await axiosClient.get("/api/v1/organizations", {
     params: {
       withSoftDeleted: true,
@@ -22,8 +20,6 @@ export async function getOrganizationById(id: string) {
 }
 
 export async function createOrganization(data: CreateOrganizationRequest) {
-  console.log("Calling createOrganization via axiosClient with data:", data);
-
   const response = await axiosClient.post("/api/v1/organizations", data);
 
   return response.data;

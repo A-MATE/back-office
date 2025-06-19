@@ -22,6 +22,10 @@ export type CreateOrganizationResponse = {
   name: string;
   type: OrganizationType;
   address?: string;
+  logo: {
+    thumbnail: string;
+    large: string;
+  };
   contact?: Contact;
   createdAt: string;
   updatedAt: string | null;
@@ -30,3 +34,4 @@ export type CreateOrganizationResponse = {
 };
 
 export type OrganizationFormData = z.infer<typeof organizationFormSchema>;
+export type Organization = CreateOrganizationResponse;

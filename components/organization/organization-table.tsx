@@ -23,8 +23,11 @@ import { format } from "date-fns";
 
 import { useState } from "react";
 import Link from "next/link";
+import { Organization } from "@/types/organization";
+import Image from "next/image";
+import { isValidImageUrl } from "@/lib/utils";
 
-const columnHelper = createColumnHelper<Organizations>();
+const columnHelper = createColumnHelper<Organization>();
 
 const columns = [
   columnHelper.accessor("id", {
@@ -59,11 +62,15 @@ const columns = [
     header: () => "Logo",
     cell: (info) => {
       const logo = info.getValue();
-      return logo ? (
-        <img
-          src={logo.small}
+      const thumbnail = logo?.thumbnail;
+
+      return isValidImageUrl(thumbnail) ? (
+        <Image
+          src={thumbnail as string}
           alt="logo"
           className="h-8 w-8 object-contain rounded"
+          width={32}
+          height={32}
         />
       ) : (
         <span className="text-muted-foreground">No logo</span>

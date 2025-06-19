@@ -8,8 +8,7 @@ export const useCreateOrganization = () => {
 
   const mutation = useMutation({
     mutationFn: (data: CreateOrganizationRequest) => createOrganization(data),
-    onSuccess: (data) => {
-      console.log("Organization created successfully:", data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: organizationKeys.lists() });
     },
     onError: (error) => {
