@@ -1,3 +1,4 @@
+import { TeamFormData } from "@/types/team";
 import axiosClient from "../axios-client";
 
 export async function getAllTeams() {
@@ -15,14 +16,14 @@ export async function getTeamById(id: string) {
   return response.data;
 }
 
-export async function createTeam(data: any) {
+export async function createTeam(data: TeamFormData) {
   const response = await axiosClient.post("/api/v1/teams", data);
 
   return response.data;
 }
 
-export async function updateTeam(id: string, data: any) {
-  const response = await axiosClient.put(`/api/v1/teams/${id}`, data);
+export async function updateTeam(id: string, data: TeamFormData) {
+  const response = await axiosClient.patch(`/api/v1/teams/${id}`, data);
   return response.data;
 }
 

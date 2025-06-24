@@ -18,16 +18,33 @@ export enum TeamGender {
   Mixed = "Mixed",
 }
 
+export type ApiTeam = {
+  id: string;
+  name: string | null;
+  description: string | null;
+  logo: {
+    thumbnail: string | null;
+    large: string | null;
+  } | null;
+  ageGroup: keyof typeof AgeGroup | null;
+  gender: keyof typeof TeamGender | null;
+  createdAt: string;
+  updatedAt: string | null;
+  deletedAt: string | null;
+  isActive: boolean | null;
+  organizationId: string | null;
+};
+
 export type Team = {
   id: string;
   name: string;
-  description?: string;
-  logo?: {
+  description: string;
+  logo: {
     thumbnail: string;
     large: string;
   };
-  ageGroup?: AgeGroup;
-  gender?: TeamGender;
+  ageGroup: AgeGroup | undefined;
+  gender: TeamGender | undefined;
   createdAt: string;
   updatedAt: string | null;
   deletedAt: string | null;

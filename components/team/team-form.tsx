@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -25,6 +25,7 @@ import {
 import { teamFormSchema } from "@/lib/validators";
 import { useOrganizations } from "@/hooks/organizations/use-organizations";
 import { AgeGroup, TeamFormData, TeamGender } from "@/types/team";
+import { EditableAvatar } from "../shared/editable-avatar";
 
 type Props = {
   defaultValues?: TeamFormData;
@@ -59,11 +60,33 @@ export const TeamForm = ({ defaultValues, onSubmit, isSubmitting }: Props) => {
   const { data: organizations = [], isLoading: isOrgLoading } =
     useOrganizations();
 
-  const submit = form.handleSubmit(onSubmit);
+  console.log("watch logo:", form.watch("logo"));
+
+  const onFormSubmit = (data: TeamFormData) => {
+    console.log("SUBMIT data:", data);
+    onSubmit(data);
+  };
+  const submit = form.handleSubmit(onFormSubmit);
 
   return (
     <Form {...form}>
       <form onSubmit={submit} className="space-y-4">
+        <Controller
+          name="logo"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <EditableAvatar
+                value={field.value}
+                onChange={(data) => {
+                  console.log("DATA RHF:", data);
+                  field.onChange(data);
+                }}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"

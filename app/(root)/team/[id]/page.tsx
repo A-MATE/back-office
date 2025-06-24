@@ -18,7 +18,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useTeam } from "@/hooks/team/use-team";
-import { useDeleteTeam } from "@/hooks/team/use-delete-team";
 import { useUpdateTeam } from "@/hooks/team/use-update-team";
 import { TeamForm } from "@/components/team/team-form";
 
@@ -30,7 +29,7 @@ export default function TeamDetail({ params }: Props) {
   const { id } = use(params);
   const { data: team, isLoading, error } = useTeam(id);
   const updateMutation = useUpdateTeam(id);
-  const deleteMutation = useDeleteTeam(id);
+  // const deleteMutation = useDeleteTeam(id);
 
   if (isLoading) {
     return (
@@ -126,14 +125,6 @@ export default function TeamDetail({ params }: Props) {
             />
           </DialogContent>
         </Dialog>
-
-        <Button
-          variant="destructive"
-          onClick={() => deleteMutation.mutate()}
-          disabled={deleteMutation.isLoading}
-        >
-          {deleteMutation.isLoading ? "Deleting..." : "Delete"}
-        </Button>
       </div>
     </div>
   );
